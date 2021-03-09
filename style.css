@@ -1,11 +1,12 @@
 :root {
-  font-family: 'Quicksand', sans-serif;
+  font-family: "Quicksand", sans-serif;
 }
 
 #configurator {
   display: grid;
-  grid-template-areas: "product options"
-                       "features features";
+  grid-template-areas:
+    "product options"
+    "features features";
   gap: 1em;
 }
 
@@ -14,12 +15,12 @@
   box-shadow: 3px 3px 8px #ddd;
   border-radius: 1em;
   position: relative;
-  transition: opacity ease-in .5s;
+  transition: opacity ease-in 0.5s;
 }
 
 #product-preview img {
   position: absolute;
-  width: 100%;
+  width: 50%; /*100%*/
   height: auto;
   top: 0;
   left: 0;
@@ -83,16 +84,40 @@
 }
 
 #selected ul li img {
-  width: 3em;
+  width: 5em; /*3em*/
 }
 
 /* Animation classes */
 
 .animate-feature-in {
-  /* TODO: Create animation for adding a feature */
-  
+  /* DONE: Create animation for adding a feature */
+  animation-name: animate-feature-in_kf;
+  animation-iteration-count: 1;
+  animation-duration: 2s;
+}
+@keyframes animate-feature-in_kf {
+  0% {
+    transform: translate(var(--diffx), var(--diffy)) scale(0);
+  }
+
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
 }
 
 .animate-feature-out {
-  /* TODO: Create animation for removing a feature */
+  /* DONE: Create animation for removing a feature */
+  animation-name: animate-feature-out_kf;
+  animation-iteration-count: 1;
+  animation-duration: 1s;
+  animation-direction: reverse;
+}
+@keyframes animate-feature-out_kf {
+  0% {
+    transform: translate(var(--diffx), var(--diffy)) scale(0);
+  }
+
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
 }

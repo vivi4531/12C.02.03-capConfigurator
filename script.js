@@ -20,40 +20,87 @@ function start() {
 function toggleOption(event) {
   const target = event.currentTarget;
   const feature = target.dataset.feature;
+  
 
   // TODO: Toggle feature in "model"
+  features[feature] = !features[feature]; 
+
 
   // If feature is (now) turned on:
-  // - mark target as chosen (add class "chosen")
-  // - un-hide the feature-layer(s) in the #product-preview;
-  // - create featureElement and append to #selected ul
+  
+
+ 
   // - create FLIP-animation to animate featureElement from img in target, to
   //   its intended position. Do it with normal animation or transition class!
 
   // Else - if the feature (became) turned off:
-  // - no longer mark target as chosen
-  // - hide the feature-layer(s) in the #product-preview
   // - find the existing featureElement in #selected ul
   // - create FLIP-animation to animate featureElement to img in target
   // - when animation is complete, remove featureElement from the DOM
+
+
   
-  if (features[feature]) {
+  if (features[feature] === true) {
+    //Select target and add chosen class
+    target.classList.add("chosen"); 
+
+    //Remove the hide class 
+    document.querySelector(`[data-feature="${feature}"`).classList.remove("hide"); 
+
+     //Create new featureElement and add it to the list
+    const newfeatureElement = createFeatureElement(feature); 
+    document.querySelector("#selected ul").appendChild(newfeatureElement); 
     // feature added
-    console.log(`Feature ${feature} is turned on!`);
 
-    // TODO: More code
+    //FLIP
+    const start = target.getBoundingClientRect();
+    const end = newfeatureElement.getBoundingClientRect();
 
-  } else {
-    // feature removed
-    console.log(`Feature ${feature} is turned off!`);
+    const diffx = start.x - end.x + "px";
+    const diffy = start.y - end.y + "px";
+
+    newfeatureElement.style.setProperty("--diffx", diffx);
+    newfeatureElement.style.setProperty("--diffy", diffy);
+
+    //Animation feature in
+    newfeatureElement.classList = "animate-feature-in";         
+      }
     
-    // TODO: More code
+   else {
+    target.classList.remove("chosen"); 
+    const theFeatureElement = document.querySelector(`#selected [data-feature="${feature}"]`);
 
+    const end = theFeatureElement.getBoundingClientRect();
+    const start = target.getBoundingClientRect();
+
+    const diffx = start.x - end.x + "px";
+    const diffy = start.y - end.y + "px";
+
+    theFeatureElement.style.setProperty("--diffx", diffx);
+    theFeatureElement.style.setProperty("--diffy", diffy);
+
+    theFeatureElement.offsetHeight; 
+
+    //Animation feature out
+    theFeatureElement.classList = "animate-feature-out"; 
+
+
+    //when animation is complete, remove featureElement from the DOM
+    theFeatureElement.addEventListener("animationend", function() {
+    theFeatureElement.remove(); 
+    //Chose the feature element and hide it
+    document.querySelector(`[data-feature=${feature}`).classList.add("hide");
+    console.log(`Feature ${feature} is turned off!`);
+}); 
+   }
   }
-}
+
+
+
 
 // Create featureElement to be appended to #selected ul - could have used a <template> instead
 function createFeatureElement(feature) {
+  //Create an li element and add feature img into it
   const li = document.createElement("li");
   li.dataset.feature = feature;
 
@@ -61,6 +108,7 @@ function createFeatureElement(feature) {
   img.src = `images/feature_${feature}.png`;
   img.alt = capitalize(feature);
 
+  //Add the li element
   li.append(img);
 
   return li;
